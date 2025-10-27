@@ -5,8 +5,8 @@ import { useNavigation } from '../contexts/NavigationContext';
 
 const LoginPage: React.FC = () => {
   const { navigateTo } = useNavigation();
-  const [email, setEmail] = useState('demo@siweb.com');
-  const [password, setPassword] = useState('123456');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
