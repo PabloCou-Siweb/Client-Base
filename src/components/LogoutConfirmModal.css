@@ -1,0 +1,184 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap');
+
+/* Overlay */
+.logout-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Modal */
+.logout-modal {
+  background: #ffffff;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 480px;
+  padding: 28px 32px 24px;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Botón cerrar */
+.logout-modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+  font-size: 24px;
+  line-height: 1;
+  color: #999999;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  padding: 0;
+  font-weight: 300;
+}
+
+.logout-modal-close:hover {
+  background: #f5f5f5;
+  color: #666666;
+}
+
+/* Contenido */
+.logout-modal-content {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+/* Icono */
+.logout-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  background: #e6f7ff;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logout-icon-img {
+  width: 24px;
+  height: 24px;
+  filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(165deg) brightness(95%) contrast(97%);
+}
+
+/* Texto */
+.logout-text {
+  flex: 1;
+  padding-top: 2px;
+}
+
+.logout-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: #000000;
+  margin: 0 0 8px 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+.logout-description {
+  font-size: 13px;
+  font-weight: 400;
+  color: #666666;
+  margin: 0;
+  line-height: 1.6;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Acciones */
+.logout-modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.btn-cancel {
+  padding: 12px 28px;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  background: #ffffff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #333333;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-cancel:hover {
+  border-color: #d0d0d0;
+  background: #fafafa;
+}
+
+.btn-confirm-logout {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 10px;
+  background: #2FA8EC;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-confirm-logout:hover {
+  background: #2589c7;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(47, 168, 236, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .logout-modal {
+    max-width: 100%;
+    padding: 24px 20px 20px;
+  }
+
+  .logout-modal-content {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .logout-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .logout-title {
+    font-size: 16px;
+  }
+
+  .logout-description {
+    font-size: 12px;
+  }
+
+  .logout-modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .btn-cancel,
+  .btn-confirm-logout {
+    width: 100%;
+  }
+}
+
