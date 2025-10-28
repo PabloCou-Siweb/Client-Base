@@ -24,7 +24,6 @@ const LoginPage: React.FC = () => {
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
-    // Limpiar error al escribir
     if (emailError) {
       setEmailError('');
     }
@@ -32,19 +31,15 @@ const LoginPage: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    // Validar solo al enviar el formulario
+
     const emailValidationError = validateEmail(email);
     const passwordValidationError = !password ? 'Contraseña requerida' : '';
     
     setEmailError(emailValidationError);
     setPasswordError(passwordValidationError);
     
-    // Si no hay errores, enviar
     if (!emailValidationError && !passwordValidationError) {
       console.log('Login attempt:', { email, password, rememberMe });
-      // Aquí iría la lógica de login
-      // Navegar a la página de lista de clientes
       navigateTo('clientList');
     }
   };

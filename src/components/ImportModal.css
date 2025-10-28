@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap');
 
-/* Overlay */
 .import-modal-overlay {
   position: fixed;
   top: 0;
@@ -16,7 +15,6 @@
   padding: 20px;
 }
 
-/* Modal */
 .import-modal {
   background: #ffffff;
   border-radius: 20px;
@@ -28,7 +26,6 @@
   font-family: 'Poppins', sans-serif;
 }
 
-/* Botón cerrar */
 .import-modal-close {
   position: absolute;
   top: 20px;
@@ -55,7 +52,6 @@
   color: #666666;
 }
 
-/* Header */
 .import-modal-header {
   display: flex;
   gap: 16px;
@@ -101,7 +97,6 @@
   font-family: 'Poppins', sans-serif;
 }
 
-/* Dropzone */
 .import-dropzone {
   border: 2px dashed #e5e5e5;
   border-radius: 14px;
@@ -161,7 +156,6 @@
   background: #f8fcff;
 }
 
-/* Archivo seleccionado */
 .file-selected {
   display: flex;
   flex-direction: column;
@@ -192,7 +186,6 @@
   color: #ef4444;
 }
 
-/* Acciones */
 .import-modal-actions {
   display: flex;
   gap: 12px;
@@ -241,7 +234,6 @@
   cursor: not-allowed;
 }
 
-/* Responsive */
 @media (max-width: 480px) {
   .import-modal {
     max-width: 100%;
@@ -267,4 +259,3 @@
     width: 100%;
   }
 }
-

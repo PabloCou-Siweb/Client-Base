@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap');
 
-/* Overlay */
 .filter-overlay {
   position: fixed;
   top: 0;
@@ -11,7 +10,6 @@
   z-index: 1000;
 }
 
-/* Sidebar */
 .filter-sidebar {
   position: fixed;
   top: 20px;
@@ -28,7 +26,6 @@
   overflow: hidden;
 }
 
-/* Header del sidebar */
 .filter-header {
   display: flex;
   align-items: center;
@@ -86,14 +83,12 @@
   color: #2589c7;
 }
 
-/* Contenido */
 .filter-content {
   flex: 1;
   overflow-y: auto;
   padding: 24px;
 }
 
-/* Sección de filtro */
 .filter-section {
   margin-bottom: 32px;
 }
@@ -128,7 +123,6 @@
   color: #2FA8EC;
 }
 
-/* Chips de proveedor */
 .filter-chips {
   display: flex;
   flex-wrap: wrap;
@@ -174,7 +168,6 @@
   font-style: italic;
 }
 
-/* Input de fecha */
 .filter-date-input {
   position: relative;
   margin-bottom: 12px;
@@ -203,7 +196,6 @@
   pointer-events: none;
 }
 
-/* Botones de fecha */
 .filter-date-buttons {
   display: flex;
   gap: 10px;
@@ -235,7 +227,6 @@
   color: #2FA8EC;
 }
 
-/* Select de estado */
 .filter-select {
   position: relative;
   display: flex;
@@ -272,7 +263,6 @@
   cursor: pointer;
 }
 
-/* Rango de precio */
 .filter-range-value {
   font-size: 13px;
   color: #666666;
@@ -311,7 +301,6 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
-/* Footer */
 .filter-footer {
   padding: 20px 24px;
   border-top: 1px solid #f0f0f0;
@@ -357,7 +346,6 @@
   box-shadow: 0 4px 12px rgba(47, 168, 236, 0.3);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .filter-sidebar {
     width: 100%;
@@ -370,4 +358,3 @@
     width: 100%;
   }
 }
-

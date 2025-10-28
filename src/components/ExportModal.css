@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap');
 
-/* Overlay */
 .export-modal-overlay {
   position: fixed;
   top: 0;
@@ -16,7 +15,6 @@
   padding: 20px;
 }
 
-/* Modal */
 .export-modal {
   background: #ffffff;
   border-radius: 20px;
@@ -28,7 +26,6 @@
   font-family: 'Poppins', sans-serif;
 }
 
-/* Botón cerrar */
 .export-modal-close {
   position: absolute;
   top: 20px;
@@ -55,7 +52,6 @@
   color: #666666;
 }
 
-/* Header */
 .export-modal-header {
   display: flex;
   gap: 16px;
@@ -101,7 +97,6 @@
   font-family: 'Poppins', sans-serif;
 }
 
-/* Opciones de formato */
 .export-formats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -138,7 +133,6 @@
   color: #000000;
 }
 
-/* Check button personalizado - siempre visible */
 .format-check {
   display: none;
 }
@@ -151,7 +145,6 @@
   display: block;
 }
 
-/* Acciones */
 .export-modal-actions {
   display: flex;
   gap: 12px;
@@ -195,7 +188,6 @@
   box-shadow: 0 4px 12px rgba(47, 168, 236, 0.3);
 }
 
-/* Responsive */
 @media (max-width: 480px) {
   .export-modal {
     max-width: 100%;
@@ -220,4 +212,3 @@
     width: 100%;
   }
 }
-

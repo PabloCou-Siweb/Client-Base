@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap');
 
-/* Overlay */
 .logout-modal-overlay {
   position: fixed;
   top: 0;
@@ -16,7 +15,6 @@
   padding: 20px;
 }
 
-/* Modal */
 .logout-modal {
   background: #ffffff;
   border-radius: 20px;
@@ -28,7 +26,6 @@
   font-family: 'Poppins', sans-serif;
 }
 
-/* Botón cerrar */
 .logout-modal-close {
   position: absolute;
   top: 20px;
@@ -55,14 +52,12 @@
   color: #666666;
 }
 
-/* Contenido */
 .logout-modal-content {
   display: flex;
   gap: 16px;
   margin-bottom: 28px;
 }
 
-/* Icono */
 .logout-icon {
   flex-shrink: 0;
   width: 48px;
@@ -80,7 +75,6 @@
   filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(165deg) brightness(95%) contrast(97%);
 }
 
-/* Texto */
 .logout-text {
   flex: 1;
   padding-top: 2px;
@@ -103,7 +97,6 @@
   font-family: 'Poppins', sans-serif;
 }
 
-/* Acciones */
 .logout-modal-actions {
   display: flex;
   gap: 12px;
@@ -147,7 +140,6 @@
   box-shadow: 0 4px 12px rgba(47, 168, 236, 0.3);
 }
 
-/* Responsive */
 @media (max-width: 480px) {
   .logout-modal {
     max-width: 100%;
@@ -181,4 +173,3 @@
     width: 100%;
   }
 }
-

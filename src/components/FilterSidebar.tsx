@@ -16,7 +16,6 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ isOpen, onClose, onApplyF
   const [priceRange, setPriceRange] = useState(5);
   const [showProviderList, setShowProviderList] = useState(false);
 
-  // Los primeros proveedores mostrados como chips
   const mainProviders = selectedProviders.slice(0, 4);
 
   const toggleProvider = (provider: string) => {

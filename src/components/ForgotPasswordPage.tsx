@@ -11,8 +11,6 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ onBack }) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log('Recuperar contraseña para:', email);
-    // Aquí iría la lógica de recuperación
-    // Volver a la página de login después de enviar
     onBack();
   };
 
