@@ -4,20 +4,25 @@ type Page = 'login' | 'clientList' | 'clientDetails';
 
 interface NavigationContextType {
   currentPage: Page;
-  navigateTo: (page: Page) => void;
+  selectedClientId: number | null;
+  navigateTo: (page: Page, clientId?: number) => void;
 }
 
 const NavigationContext = createContext<NavigationContextType | undefined>(undefined);
 
 export const NavigationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [currentPage, setCurrentPage] = useState<Page>('login');
+  const [selectedClientId, setSelectedClientId] = useState<number | null>(null);
 
-  const navigateTo = (page: Page) => {
+  const navigateTo = (page: Page, clientId?: number) => {
     setCurrentPage(page);
+    if (clientId !== undefined) {
+      setSelectedClientId(clientId);
+    }
   };
 
   return (
-    <NavigationContext.Provider value={{ currentPage, navigateTo }}>
+    <NavigationContext.Provider value={{ currentPage, selectedClientId, navigateTo }}>
       {children}
     </NavigationContext.Provider>
   );

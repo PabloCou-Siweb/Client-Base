@@ -268,12 +268,14 @@
   font-weight: 500;
 }
 
-.status-badge.activo {
+.status-badge.activo,
+.status-badge.active {
   background: #e6f7ff;
   color: #2FA8EC;
 }
 
-.status-badge.inactivo {
+.status-badge.inactivo,
+.status-badge.inactive {
   background: #f5f5f5;
   color: #999999;
 }
@@ -284,12 +286,32 @@
   border-radius: 50%;
 }
 
-.status-badge.activo .status-dot {
+.status-badge.activo .status-dot,
+.status-badge.active .status-dot {
   background: #2FA8EC;
 }
 
-.status-badge.inactivo .status-dot {
+.status-badge.inactivo .status-dot,
+.status-badge.inactive .status-dot {
   background: #999999;
+}
+
+.loading-message {
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 16px;
+  color: #666;
+}
+
+.error-message-list {
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 14px;
+  color: #ef4444;
+  background-color: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  margin: 20px;
 }
 
 .td-actions {

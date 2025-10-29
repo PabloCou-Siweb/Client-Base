@@ -10,11 +10,20 @@ interface FilterSidebarProps {
 
 const FilterSidebar: React.FC<FilterSidebarProps> = ({ isOpen, onClose, onApplyFilters }) => {
   const [selectedProviders, setSelectedProviders] = useState<string[]>(['Tech Solutions', 'CloudWave']);
-  const [selectedDate, setSelectedDate] = useState('06/2/2025');
-  const [dateFilter, setDateFilter] = useState('esta-semana');
-  const [selectedStatus, setSelectedStatus] = useState('Activo');
+  const [selectedDate, setSelectedDate] = useState('15/03/2024');
+  const [dateFilter, setDateFilter] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState('Todos');
   const [priceRange, setPriceRange] = useState(5);
   const [showProviderList, setShowProviderList] = useState(false);
+
+  const handleDateFilterClick = (filter: string) => {
+    setDateFilter(filter);
+    const today = new Date();
+    
+    if (filter === 'hoy') {
+      setSelectedDate(today.toLocaleDateString('es-ES'));
+    }
+  };
 
   const mainProviders = selectedProviders.slice(0, 4);
 
@@ -30,8 +39,17 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ isOpen, onClose, onApplyF
     setSelectedProviders([]);
     setSelectedDate('');
     setDateFilter('');
-    setSelectedStatus('Activo');
+    setSelectedStatus('Todos');
     setPriceRange(5);
+    
+    onApplyFilters({
+      providers: [],
+      date: '',
+      dateFilter: '',
+      status: 'Todos',
+      priceRange: 0
+    });
+    onClose();
   };
 
   const handleApply = () => {
@@ -108,19 +126,19 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ isOpen, onClose, onApplyF
             <div className="filter-date-buttons">
               <button
                 className={`date-button ${dateFilter === 'hoy' ? 'active' : ''}`}
-                onClick={() => setDateFilter('hoy')}
+                onClick={() => handleDateFilterClick('hoy')}
               >
                 Hoy
               </button>
               <button
                 className={`date-button ${dateFilter === 'esta-semana' ? 'active' : ''}`}
-                onClick={() => setDateFilter('esta-semana')}
+                onClick={() => handleDateFilterClick('esta-semana')}
               >
                 Esta semana
               </button>
               <button
                 className={`date-button ${dateFilter === 'este-mes' ? 'active' : ''}`}
-                onClick={() => setDateFilter('este-mes')}
+                onClick={() => handleDateFilterClick('este-mes')}
               >
                 Este mes
               </button>
@@ -131,12 +149,13 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ isOpen, onClose, onApplyF
           <div className="filter-section">
             <label className="filter-label">Estado</label>
             <div className="filter-select">
-              <div className="status-indicator activo"></div>
+              <div className={`status-indicator ${selectedStatus === 'Activo' ? 'activo' : selectedStatus === 'Inactivo' ? 'inactivo' : ''}`}></div>
               <select
                 value={selectedStatus}
                 onChange={(e) => setSelectedStatus(e.target.value)}
                 className="select-input"
               >
+                <option value="Todos">Todos</option>
                 <option value="Activo">Activo</option>
                 <option value="Inactivo">Inactivo</option>
               </select>
@@ -146,7 +165,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ isOpen, onClose, onApplyF
           {/* Proveedor (rango) */}
           <div className="filter-section">
             <div className="filter-section-header">
-              <label className="filter-label">Proveedor</label>
+              <label className="filter-label">Precio</label>
               <span className="filter-range-value">0 - {priceRange * 2}k</span>
             </div>
             <input
@@ -156,6 +175,9 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ isOpen, onClose, onApplyF
               value={priceRange}
               onChange={(e) => setPriceRange(parseInt(e.target.value))}
               className="filter-range"
+              style={{
+                background: `linear-gradient(to right, #2FA8EC 0%, #2FA8EC ${(priceRange / 10) * 100}%, #e5e5e5 ${(priceRange / 10) * 100}%, #e5e5e5 100%)`
+              }}
             />
           </div>
         </div>

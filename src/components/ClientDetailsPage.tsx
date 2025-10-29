@@ -1,24 +1,61 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './ClientDetailsPage.css';
 import Header from './Header';
 import { useNavigation } from '../contexts/NavigationContext';
+import { clientService } from '../services/client.service';
+import { Client } from '../types';
+
+interface CustomerData {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  price: string;
+  status: string;
+  createdAt: string;
+}
 
 const ClientDetailsPage: React.FC = () => {
-  const { navigateTo } = useNavigation();
+  const { navigateTo, selectedClientId } = useNavigation();
+  const [client, setClient] = useState<Client | null>(null);
+  const [customers, setCustomers] = useState<CustomerData[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const customers = [
-    { id: 1, name: 'John Smith', email: 'john.smith@example.com', phone: '555-1234', city: 'New York', city2: 'New York', country: 'Untin States' },
-    { id: 2, name: 'Lisa Brown', email: 'lisa.brown@example.com', phone: '555-5678', city: 'Los Angeles', city2: 'Chicago', country: 'Untte States' },
-    { id: 3, name: 'Michael Johnson', email: 'sarah.davis@example.com', phone: '555-6718', city: 'Houston', city2: 'Houston', country: 'Untie States' },
-    { id: 4, name: 'James Wilson', email: 'james.wilson@example.com', phone: '551-1111', city: 'Phoenix', city2: 'Phoenix', country: 'Unite States' },
-    { id: 5, name: 'Amanda Martinez', email: 'amanda.martinezexample.com', phone: '5576', city: 'San Antonio', city2: 'San Diego', country: 'Unite States' },
-    { id: 6, name: 'Robert Taylor', email: 'robert.taylor@example.com', phone: '551-811', city: 'Dallas', city2: 'Dallas', country: 'Unite States' },
-    { id: 7, name: 'Linda White', email: 'linda.white@example.com', phone: '555-937', city: 'Austin', city2: 'Austin', country: 'Unite States' },
-    { id: 8, name: 'William Anderson', email: 'william.anderson@example', phone: '556-2111', city: 'San Jose', city2: 'San Jose', country: 'Unite States' },
-    { id: 9, name: 'Emily Harris', email: 'emily.harris@example.com', phone: '555-222', city: 'Columbus', city2: 'Columbus', country: 'Unite States' },
-    { id: 10, name: 'David Clark', email: 'david.clark@example.com', phone: '555-133', city: 'San Jose', city2: 'Indianapolis', country: 'Unite States' },
-    { id: 11, name: 'Emma Thompson', email: 'emma.thompson@example', phone: '556-095', city: 'Indianapolis', city2: '', country: 'Unite States' },
-  ];
+  useEffect(() => {
+    if (selectedClientId) {
+      fetchClientDetails();
+    }
+  }, [selectedClientId]);
+
+  const fetchClientDetails = async () => {
+    if (!selectedClientId) return;
+
+    setIsLoading(true);
+    setError('');
+
+    try {
+      const clientData = await clientService.getClientById(selectedClientId);
+      setClient(clientData);
+
+      const mockCustomers: CustomerData[] = Array.from({ length: 10 }, (_, i) => ({
+        id: i + 1,
+        name: `Customer ${i + 1}`,
+        email: `customer${i + 1}@example.com`,
+        phone: `555-${String(i + 1).padStart(4, '0')}`,
+        price: `${(Math.random() * 1000 + 100).toFixed(2)} €`,
+        status: i % 3 === 0 ? 'Activo' : 'Inactivo',
+        createdAt: new Date(Date.now() - Math.random() * 10000000000).toLocaleDateString('es-ES'),
+      }));
+
+      setCustomers(mockCustomers);
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Error al cargar los detalles del cliente');
+      console.error('Error fetching client details:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="client-details-page">
@@ -28,50 +65,92 @@ const ClientDetailsPage: React.FC = () => {
       />
 
       <div className="client-details-container">
-        <div className="excel-table-wrapper">
-          <table className="excel-table">
-            <thead>
-              <tr className="excel-header-row">
-                <th className="excel-col-header">A</th>
-                <th className="excel-col-header">B</th>
-                <th className="excel-col-header">C</th>
-                <th className="excel-col-header">D</th>
-                <th className="excel-col-header">E</th>
-                <th className="excel-col-header">F</th>
-                <th className="excel-col-header">E</th>
-              </tr>
-              <tr className="excel-title-row">
-                <th colSpan={7} className="excel-title">Customer Database</th>
-              </tr>
-              <tr className="excel-columns-row">
-                <th className="excel-row-number">D</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>City</th>
-                <th>City</th>
-                <th>Country</th>
-              </tr>
-            </thead>
-            <tbody>
-              {customers.map((customer) => (
-                <tr key={customer.id}>
-                  <td className="excel-row-number">{customer.id}</td>
-                  <td>{customer.name}</td>
-                  <td>{customer.email}</td>
-                  <td>{customer.phone}</td>
-                  <td>{customer.city}</td>
-                  <td>{customer.city2}</td>
-                  <td>{customer.country}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        {isLoading && (
+          <div className="loading-message" style={{ padding: '60px', textAlign: 'center' }}>
+            Cargando detalles...
+          </div>
+        )}
+
+        {error && (
+          <div className="error-message-list" style={{ margin: '40px' }}>
+            {error}
+          </div>
+        )}
+
+        {!isLoading && !error && client && (
+          <>
+            <div className="client-info-header" style={{ 
+              padding: '20px 40px', 
+              backgroundColor: '#f8f9fa', 
+              borderBottom: '1px solid #e5e5e5',
+              marginBottom: '20px'
+            }}>
+              <h2 style={{ margin: 0, fontSize: '24px', fontWeight: 500, color: '#333' }}>
+                {client.name}
+              </h2>
+              <p style={{ margin: '8px 0 0 0', fontSize: '14px', color: '#666' }}>
+                {client.email} • {client.phone}
+              </p>
+            </div>
+
+            <div className="excel-table-wrapper">
+              <table className="excel-table">
+                <thead>
+                  <tr className="excel-header-row">
+                    <th className="excel-col-header">A</th>
+                    <th className="excel-col-header">B</th>
+                    <th className="excel-col-header">C</th>
+                    <th className="excel-col-header">D</th>
+                    <th className="excel-col-header">E</th>
+                    <th className="excel-col-header">F</th>
+                    <th className="excel-col-header">G</th>
+                  </tr>
+                  <tr className="excel-title-row">
+                    <th colSpan={7} className="excel-title">Customer Database - {client.name}</th>
+                  </tr>
+                  <tr className="excel-columns-row">
+                    <th className="excel-row-number">ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {customers.map((customer) => (
+                    <tr key={customer.id}>
+                      <td className="excel-row-number">{customer.id}</td>
+                      <td>{customer.name}</td>
+                      <td>{customer.email}</td>
+                      <td>{customer.phone}</td>
+                      <td>{customer.price}</td>
+                      <td>{customer.status}</td>
+                      <td>{customer.createdAt}</td>
+                    </tr>
+                  ))}
+                  {customers.length === 0 && (
+                    <tr>
+                      <td colSpan={7} style={{ textAlign: 'center', padding: '40px', color: '#666' }}>
+                        No hay datos de clientes disponibles
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
+
+        {!isLoading && !error && !client && (
+          <div style={{ padding: '60px', textAlign: 'center', color: '#666' }}>
+            No se ha seleccionado ningún cliente
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
 export default ClientDetailsPage;
-

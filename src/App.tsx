@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import { NavigationProvider, useNavigation } from './contexts/NavigationContext';
+import { AuthProvider } from './contexts/AuthContext';
 import LoginPage from './components/LoginPage';
 import ClientListPage from './components/ClientListPage';
 import ClientDetailsPage from './components/ClientDetailsPage';
@@ -19,9 +20,11 @@ const AppContent: React.FC = () => {
 
 function App() {
   return (
-    <NavigationProvider>
-      <AppContent />
-    </NavigationProvider>
+    <AuthProvider>
+      <NavigationProvider>
+        <AppContent />
+      </NavigationProvider>
+    </AuthProvider>
   );
 }
 

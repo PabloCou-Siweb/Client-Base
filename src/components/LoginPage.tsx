@@ -2,15 +2,19 @@ import React, { useState } from 'react';
 import './LoginPage.css';
 import ForgotPasswordPage from './ForgotPasswordPage';
 import { useNavigation } from '../contexts/NavigationContext';
+import { useAuth } from '../contexts/AuthContext';
 
 const LoginPage: React.FC = () => {
   const { navigateTo } = useNavigation();
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [loginError, setLoginError] = useState('');
 
   const validateEmail = (value: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -27,9 +31,12 @@ const LoginPage: React.FC = () => {
     if (emailError) {
       setEmailError('');
     }
+    if (loginError) {
+      setLoginError('');
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const emailValidationError = validateEmail(email);
@@ -39,8 +46,17 @@ const LoginPage: React.FC = () => {
     setPasswordError(passwordValidationError);
     
     if (!emailValidationError && !passwordValidationError) {
-      console.log('Login attempt:', { email, password, rememberMe });
-      navigateTo('clientList');
+      setIsLoading(true);
+      setLoginError('');
+      
+      try {
+        await login({ email, password });
+        navigateTo('clientList');
+      } catch (error: any) {
+        setLoginError(error.message || 'Error al iniciar sesión. Por favor, verifica tus credenciales.');
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -80,6 +96,7 @@ const LoginPage: React.FC = () => {
                 onChange={(e) => {
                   setPassword(e.target.value);
                   setPasswordError('');
+                  setLoginError('');
                 }}
               />
               {passwordError && <span className="error-message">{passwordError}</span>}
@@ -106,8 +123,10 @@ const LoginPage: React.FC = () => {
               </a>
             </div>
 
-            <button type="submit" className="btn-primary">
-              Acceder
+            {loginError && <div className="login-error-message">{loginError}</div>}
+
+            <button type="submit" className="btn-primary" disabled={isLoading}>
+              {isLoading ? 'Cargando...' : 'Acceder'}
             </button>
 
             <p className="terms-text">

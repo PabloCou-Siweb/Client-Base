@@ -4,23 +4,14 @@ import './ExportModal.css';
 interface ExportModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onExport: (format: string) => void;
+  onExport: (format: 'excel' | 'csv' | 'pdf') => void;
 }
 
 const ExportModal: React.FC<ExportModalProps> = ({ isOpen, onClose, onExport }) => {
-  const [selectedFormats, setSelectedFormats] = useState<string[]>(['xlsx']);
-
-  const toggleFormat = (format: string) => {
-    setSelectedFormats(prev =>
-      prev.includes(format)
-        ? prev.filter(f => f !== format)
-        : [...prev, format]
-    );
-  };
+  const [selectedFormat, setSelectedFormat] = useState<'excel' | 'csv' | 'pdf'>('excel');
 
   const handleExport = () => {
-    onExport(selectedFormats.join(','));
-    onClose();
+    onExport(selectedFormat);
   };
 
   if (!isOpen) return null;
@@ -46,24 +37,24 @@ const ExportModal: React.FC<ExportModalProps> = ({ isOpen, onClose, onExport }) 
 
         <div className="export-formats">
           <button
-            className={`format-option ${selectedFormats.includes('xlsx') ? 'selected' : ''}`}
-            onClick={() => toggleFormat('xlsx')}
+            className={`format-option ${selectedFormat === 'excel' ? 'selected' : ''}`}
+            onClick={() => setSelectedFormat('excel')}
           >
             <div className="check-dot"></div>
             <span>Excel (.xlsx)</span>
           </button>
 
           <button
-            className={`format-option ${selectedFormats.includes('csv') ? 'selected' : ''}`}
-            onClick={() => toggleFormat('csv')}
+            className={`format-option ${selectedFormat === 'csv' ? 'selected' : ''}`}
+            onClick={() => setSelectedFormat('csv')}
           >
             <div className="check-dot"></div>
             <span>CSV (.csv)</span>
           </button>
 
           <button
-            className={`format-option ${selectedFormats.includes('pdf') ? 'selected' : ''}`}
-            onClick={() => toggleFormat('pdf')}
+            className={`format-option ${selectedFormat === 'pdf' ? 'selected' : ''}`}
+            onClick={() => setSelectedFormat('pdf')}
           >
             <div className="check-dot"></div>
             <span>PDF (.pdf)</span>
@@ -77,7 +68,6 @@ const ExportModal: React.FC<ExportModalProps> = ({ isOpen, onClose, onExport }) 
           <button 
             className="btn-export-confirm" 
             onClick={handleExport}
-            disabled={selectedFormats.length === 0}
           >
             Exportar
           </button>

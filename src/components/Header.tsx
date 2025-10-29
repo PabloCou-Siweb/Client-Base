@@ -1,22 +1,20 @@
 import React from 'react';
 import './Header.css';
 import { useNavigation } from '../contexts/NavigationContext';
+import { useAuth } from '../contexts/AuthContext';
 import LogoutConfirmModal from './LogoutConfirmModal';
 
 interface HeaderProps {
   showBackButton?: boolean;
   onBackClick?: () => void;
-  userName?: string;
-  userAvatar?: string;
 }
 
 const Header: React.FC<HeaderProps> = ({ 
   showBackButton = false, 
   onBackClick,
-  userName = 'Diego P.',
-  userAvatar
 }) => {
   const { navigateTo } = useNavigation();
+  const { user, logout } = useAuth();
   const [showMenu, setShowMenu] = React.useState(false);
   const [showLogoutModal, setShowLogoutModal] = React.useState(false);
 
@@ -34,6 +32,7 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   const handleLogoutConfirm = () => {
+    logout();
     setShowLogoutModal(false);
     navigateTo('login');
   };
@@ -55,17 +54,13 @@ const Header: React.FC<HeaderProps> = ({
 
       <div className="header-right">
         <div className="header-user">
-          {userAvatar ? (
-            <img src={userAvatar} alt={userName} className="header-avatar" />
-          ) : (
-            <div className="header-avatar-placeholder">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                <circle cx="12" cy="7" r="4"/>
-              </svg>
-            </div>
-          )}
-          <span className="header-username">{userName}</span>
+          <div className="header-avatar-placeholder">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>
+          <span className="header-username">{user?.name || 'Usuario'}</span>
           <button 
             className="header-menu-button" 
             aria-label="Menú"
