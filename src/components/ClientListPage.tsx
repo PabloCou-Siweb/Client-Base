@@ -267,7 +267,7 @@ const ClientListPage: React.FC = () => {
           }
           
           if (appliedFilters.priceRange) {
-            transformedFilters.maxPrice = appliedFilters.priceRange * 1000;
+            transformedFilters.maxPrice = appliedFilters.priceRange * 2000;
           }
           
           setFilters(transformedFilters);

@@ -96,15 +96,6 @@ const ClientDetailsPage: React.FC = () => {
             <div className="excel-table-wrapper">
               <table className="excel-table">
                 <thead>
-                  <tr className="excel-header-row">
-                    <th className="excel-col-header">A</th>
-                    <th className="excel-col-header">B</th>
-                    <th className="excel-col-header">C</th>
-                    <th className="excel-col-header">D</th>
-                    <th className="excel-col-header">E</th>
-                    <th className="excel-col-header">F</th>
-                    <th className="excel-col-header">G</th>
-                  </tr>
                   <tr className="excel-title-row">
                     <th colSpan={7} className="excel-title">Customer Database - {client.name}</th>
                   </tr>
