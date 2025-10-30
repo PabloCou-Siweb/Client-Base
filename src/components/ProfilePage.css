@@ -69,6 +69,10 @@
   flex-shrink: 0;
 }
 
+.profile-avatar-image {
+  object-fit: cover;
+}
+
 .profile-avatar-info {
   display: flex;
   flex-direction: column;

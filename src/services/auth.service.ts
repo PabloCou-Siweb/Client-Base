@@ -40,5 +40,21 @@ export const authService = {
     );
     return response.data;
   },
+
+  uploadAvatar: async (file: File): Promise<{ message: string; avatarUrl: string }> => {
+    const formData = new FormData();
+    formData.append('avatar', file);
+    
+    const response = await axiosInstance.post<{ message: string; avatarUrl: string }>(
+      API_CONFIG.ENDPOINTS.AUTH.UPLOAD_AVATAR,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+    return response.data;
+  },
 };
 

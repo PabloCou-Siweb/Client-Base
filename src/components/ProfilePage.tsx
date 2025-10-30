@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import './ProfilePage.css';
 import Header from './Header';
 import { useNavigation } from '../contexts/NavigationContext';
@@ -16,14 +16,18 @@ const ProfilePage: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [profileSuccessMessage, setProfileSuccessMessage] = useState('');
+  const [avatarError, setAvatarError] = useState('');
   const [fullNameError, setFullNameError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [currentPasswordError, setCurrentPasswordError] = useState('');
   const [newPasswordError, setNewPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
+  
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const getInitials = (name: string) => {
     const names = name.split(' ');
@@ -84,6 +88,37 @@ const ProfilePage: React.FC = () => {
       }
     } finally {
       setIsUpdatingProfile(false);
+    }
+  };
+
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setAvatarError('');
+
+    if (file.size > 2 * 1024 * 1024) {
+      setAvatarError('El archivo es muy grande. Máximo 2MB');
+      return;
+    }
+
+    if (!file.type.startsWith('image/')) {
+      setAvatarError('Solo se permiten imágenes (JPG, PNG, GIF)');
+      return;
+    }
+
+    setIsUploadingAvatar(true);
+    try {
+      const response = await authService.uploadAvatar(file);
+      updateUser({ avatarUrl: response.avatarUrl });
+      setProfileSuccessMessage('Foto actualizada correctamente');
+    } catch (err: any) {
+      setAvatarError(err.response?.data?.error || 'Error al subir la foto');
+    } finally {
+      setIsUploadingAvatar(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
 
@@ -170,14 +205,38 @@ const ProfilePage: React.FC = () => {
           </div>
 
           <div className="profile-avatar-container">
-            <div className="profile-avatar-large">
-              {getInitials(user?.name || 'Usuario')}
-            </div>
+            {user?.avatarUrl ? (
+              <img 
+                src={user.avatarUrl} 
+                alt="Avatar" 
+                className="profile-avatar-large profile-avatar-image"
+              />
+            ) : (
+              <div className="profile-avatar-large">
+                {getInitials(user?.name || 'Usuario')}
+              </div>
+            )}
             <div className="profile-avatar-info">
-              <button className="btn-change-photo">
-                Cambiar foto
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleAvatarChange}
+                accept="image/*"
+                style={{ display: 'none' }}
+              />
+              <button 
+                className="btn-change-photo"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isUploadingAvatar}
+              >
+                {isUploadingAvatar ? 'Subiendo...' : 'Cambiar foto'}
               </button>
               <span className="avatar-hint">máx 500kb (2MB)</span>
+              {avatarError && (
+                <span className="profile-input-error" style={{ marginTop: '4px' }}>
+                  {avatarError}
+                </span>
+              )}
             </div>
           </div>
 

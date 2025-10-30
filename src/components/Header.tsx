@@ -56,12 +56,20 @@ const Header: React.FC<HeaderProps> = ({
 
       <div className="header-right">
         <div className="header-user">
-          <div className="header-avatar-placeholder">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-              <circle cx="12" cy="7" r="4"/>
-            </svg>
-          </div>
+          {user?.avatarUrl ? (
+            <img 
+              src={user.avatarUrl} 
+              alt="Avatar" 
+              className="header-avatar"
+            />
+          ) : (
+            <div className="header-avatar-placeholder">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+            </div>
+          )}
           <span className="header-username">{user?.name || 'Usuario'}</span>
           <button 
             className="header-menu-button" 
