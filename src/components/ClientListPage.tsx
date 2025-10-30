@@ -152,10 +152,6 @@ const ClientListPage: React.FC = () => {
               <img src="/img/filter-icon.png" alt="" className="btn-icon" />
               Filtros
             </button>
-            <button className="btn-primary-action">
-              <img src="/img/add-icon.png" alt="" className="btn-icon" />
-              Nueva base
-            </button>
           </div>
         </div>
 
@@ -259,21 +255,25 @@ const ClientListPage: React.FC = () => {
       <FilterSidebar
         isOpen={showFilters}
         onClose={() => setShowFilters(false)}
-        onApplyFilters={(appliedFilters) => {
-          const transformedFilters: PaginationParams = {};
-          
-          if (appliedFilters.status && appliedFilters.status !== 'Todos') {
-            transformedFilters.status = appliedFilters.status === 'Activo' ? 'active' : 'inactive';
-          }
-          
-          if (appliedFilters.priceRange) {
-            transformedFilters.maxPrice = appliedFilters.priceRange * 2000;
-          }
-          
-          setFilters(transformedFilters);
-          setCurrentPage(1);
-          setShowFilters(false);
-        }}
+            onApplyFilters={(appliedFilters) => {
+              const transformedFilters: PaginationParams = {};
+              
+              if (appliedFilters.status && appliedFilters.status !== 'Todos') {
+                transformedFilters.status = appliedFilters.status === 'Activo' ? 'active' : 'inactive';
+              }
+
+              if (appliedFilters.minPrice !== undefined && appliedFilters.minPrice > 0) {
+                transformedFilters.minPrice = appliedFilters.minPrice * 2000;
+              }
+
+              if (appliedFilters.maxPrice !== undefined && appliedFilters.maxPrice > 0) {
+                transformedFilters.maxPrice = appliedFilters.maxPrice * 2000;
+              }
+
+              setFilters(transformedFilters);
+              setCurrentPage(1);
+              setShowFilters(false);
+            }}
       />
 
       <ImportModal

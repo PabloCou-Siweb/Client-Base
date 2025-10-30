@@ -13,7 +13,8 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ isOpen, onClose, onApplyF
   const [selectedDate, setSelectedDate] = useState('15/03/2024');
   const [dateFilter, setDateFilter] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('Todos');
-  const [priceRange, setPriceRange] = useState(5);
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(10);
   const [showProviderList, setShowProviderList] = useState(false);
 
   const handleDateFilterClick = (filter: string) => {
@@ -40,14 +41,16 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ isOpen, onClose, onApplyF
     setSelectedDate('');
     setDateFilter('');
     setSelectedStatus('Todos');
-    setPriceRange(5);
+    setMinPrice(0);
+    setMaxPrice(10);
     
     onApplyFilters({
       providers: [],
       date: '',
       dateFilter: '',
       status: 'Todos',
-      priceRange: 0
+      minPrice: 0,
+      maxPrice: 0
     });
     onClose();
   };
@@ -58,7 +61,8 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ isOpen, onClose, onApplyF
       date: selectedDate,
       dateFilter,
       status: selectedStatus,
-      priceRange
+      minPrice,
+      maxPrice
     });
     onClose();
   };
@@ -162,23 +166,45 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ isOpen, onClose, onApplyF
             </div>
           </div>
 
-          {/* Proveedor (rango) */}
           <div className="filter-section">
             <div className="filter-section-header">
-              <label className="filter-label">Precio</label>
-              <span className="filter-range-value">0 - {priceRange * 2}k</span>
+              <label className="filter-label">Proveedor</label>
+              <span className="filter-range-value">{minPrice * 2}k - {maxPrice * 2}k</span>
             </div>
-            <input
-              type="range"
-              min="0"
-              max="10"
-              value={priceRange}
-              onChange={(e) => setPriceRange(parseInt(e.target.value))}
-              className="filter-range"
-              style={{
-                background: `linear-gradient(to right, #2FA8EC 0%, #2FA8EC ${(priceRange / 10) * 100}%, #e5e5e5 ${(priceRange / 10) * 100}%, #e5e5e5 100%)`
-              }}
-            />
+            <div className="dual-range-container">
+              <input
+                type="range"
+                min="0"
+                max="10"
+                value={minPrice}
+                onChange={(e) => {
+                  const value = parseInt(e.target.value);
+                  if (value <= maxPrice) {
+                    setMinPrice(value);
+                  }
+                }}
+                className="filter-range range-min"
+                style={{
+                  background: `linear-gradient(to right, #e5e5e5 0%, #e5e5e5 ${(minPrice / 10) * 100}%, #2FA8EC ${(minPrice / 10) * 100}%, #2FA8EC ${(maxPrice / 10) * 100}%, #e5e5e5 ${(maxPrice / 10) * 100}%, #e5e5e5 100%)`
+                }}
+              />
+              <input
+                type="range"
+                min="0"
+                max="10"
+                value={maxPrice}
+                onChange={(e) => {
+                  const value = parseInt(e.target.value);
+                  if (value >= minPrice) {
+                    setMaxPrice(value);
+                  }
+                }}
+                className="filter-range range-max"
+                style={{
+                  background: 'transparent'
+                }}
+              />
+            </div>
           </div>
         </div>
 

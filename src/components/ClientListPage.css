@@ -94,40 +94,6 @@
   height: 18px;
 }
 
-.btn-primary-action {
-  padding: 10px 20px;
-  border: 2px solid #2FA8EC;
-  border-radius: 10px;
-  background: #ffffff;
-  font-family: 'Poppins', sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  color: #2FA8EC;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  outline: none;
-}
-
-.btn-primary-action:hover {
-  background: #2FA8EC;
-  color: #ffffff;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(47, 168, 236, 0.3);
-}
-
-.btn-primary-action .btn-icon {
-  width: 18px;
-  height: 18px;
-  transition: filter 0.2s ease;
-}
-
-.btn-primary-action:hover .btn-icon {
-  filter: brightness(0) invert(1);
-}
-
 .client-table-wrapper {
   background: #ffffff;
   border-radius: 16px;
