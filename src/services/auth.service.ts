@@ -28,5 +28,17 @@ export const authService = {
     const response = await axiosInstance.put<User>(API_CONFIG.ENDPOINTS.AUTH.PROFILE, data);
     return response.data;
   },
+
+  changePassword: async (data: {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+  }): Promise<{ message: string }> => {
+    const response = await axiosInstance.put<{ message: string }>(
+      API_CONFIG.ENDPOINTS.AUTH.CHANGE_PASSWORD,
+      data
+    );
+    return response.data;
+  },
 };
 

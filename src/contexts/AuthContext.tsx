@@ -30,17 +30,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const login = async (credentials: LoginRequest) => {
-    try {
-      const response = await authService.login(credentials);
-      
-      setToken(response.token);
-      setUser(response.user);
-      
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('user', JSON.stringify(response.user));
-    } catch (error: any) {
-      throw new Error(error.response?.data?.message || 'Error al iniciar sesión');
-    }
+    const response = await authService.login(credentials);
+    
+    setToken(response.token);
+    setUser(response.user);
+    
+    localStorage.setItem('token', response.token);
+    localStorage.setItem('user', JSON.stringify(response.user));
   };
 
   const logout = () => {

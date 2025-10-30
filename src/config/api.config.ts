@@ -6,6 +6,7 @@ export const API_CONFIG = {
       LOGIN: '/auth/login',
       REGISTER: '/auth/register',
       PROFILE: '/auth/profile',
+      CHANGE_PASSWORD: '/auth/change-password',
     },
     CLIENTS: {
       LIST: '/clients',

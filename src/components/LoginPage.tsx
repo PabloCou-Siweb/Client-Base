@@ -48,12 +48,22 @@ const LoginPage: React.FC = () => {
     if (!emailValidationError && !passwordValidationError) {
       setIsLoading(true);
       setLoginError('');
+      setEmailError('');
+      setPasswordError('');
       
       try {
         await login({ email, password });
         navigateTo('clientList');
       } catch (error: any) {
-        setLoginError(error.message || 'Error al iniciar sesión. Por favor, verifica tus credenciales.');
+        const errorMessage = error.response?.data?.message || error.message || '';
+        
+        if (errorMessage.toLowerCase().includes('email') || errorMessage.toLowerCase().includes('correo') || errorMessage.toLowerCase().includes('usuario no encontrado')) {
+          setEmailError('Email inválido');
+        } else if (errorMessage.toLowerCase().includes('contraseña') || errorMessage.toLowerCase().includes('password')) {
+          setPasswordError('Contraseña inválida');
+        } else {
+          setLoginError(errorMessage || 'Error al iniciar sesión. Por favor, verifica tus credenciales.');
+        }
       } finally {
         setIsLoading(false);
       }

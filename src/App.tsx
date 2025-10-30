@@ -5,6 +5,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import LoginPage from './components/LoginPage';
 import ClientListPage from './components/ClientListPage';
 import ClientDetailsPage from './components/ClientDetailsPage';
+import ProfilePage from './components/ProfilePage';
 
 const AppContent: React.FC = () => {
   const { currentPage } = useNavigation();
@@ -14,6 +15,7 @@ const AppContent: React.FC = () => {
       {currentPage === 'login' && <LoginPage />}
       {currentPage === 'clientList' && <ClientListPage />}
       {currentPage === 'clientDetails' && <ClientDetailsPage />}
+      {currentPage === 'profile' && <ProfilePage />}
     </div>
   );
 };
