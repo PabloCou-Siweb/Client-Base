@@ -112,7 +112,7 @@
 .client-table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed;
+  table-layout: auto;
 }
 
 .client-table thead {
@@ -139,37 +139,24 @@
 .th-sortable {
   cursor: pointer;
   user-select: none;
+  white-space: nowrap;
 }
 
 .th-sortable:hover {
   color: #2FA8EC;
 }
 
-.client-table th:nth-child(2),
-.client-table td:nth-child(2) {
-  width: 35%;
+/* Anchos específicos por tipo de columna */
+.client-table th:first-child,
+.client-table td:first-child {
+  width: 60px;
 }
 
-.client-table th:nth-child(3),
-.client-table td:nth-child(3) {
-  width: 15%;
-}
-
-.client-table th:nth-child(4),
-.client-table td:nth-child(4) {
-  width: 12%;
-}
-
-.client-table th:nth-child(5),
-.client-table td:nth-child(5) {
-  width: 13%;
-}
-
-.client-table th:nth-child(6),
-.client-table td:nth-child(6) {
+.client-table th:last-child,
+.client-table td:last-child {
   width: 100px;
   min-width: 100px;
-  max-width: 100px;
+  text-align: center;
 }
 
 .client-table tbody tr {
@@ -202,6 +189,8 @@
 
 .td-provider {
   overflow: hidden;
+  min-width: 200px;
+  max-width: 400px;
 }
 
 .provider-name {
@@ -305,8 +294,7 @@
 }
 
 .td-actions {
-  text-align: left;
-
+  text-align: center;
 }
 
 .btn-action {
