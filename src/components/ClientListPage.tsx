@@ -4,8 +4,9 @@ import Header from './Header';
 import FilterSidebar from './FilterSidebar';
 import ImportModal from './ImportModal';
 import ExportModal from './ExportModal';
+import ColumnSelector from './ColumnSelector';
 import { useNavigation } from '../contexts/NavigationContext';
-import { Client } from '../types';
+import { Client, ClientField, AVAILABLE_FIELDS } from '../types';
 import { clientService } from '../services/client.service';
 import { importExportService } from '../services/import-export.service';
 import { PaginationParams } from '../types';
@@ -24,7 +25,17 @@ const ClientListPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [filters, setFilters] = useState<PaginationParams>({});
+  const [visibleColumns, setVisibleColumns] = useState<ClientField[]>(() => {
+    const saved = localStorage.getItem('visibleColumns');
+    return saved 
+      ? JSON.parse(saved) 
+      : AVAILABLE_FIELDS.filter(f => f.defaultVisible).map(f => f.key);
+  });
   const itemsPerPage = 10;
+
+  useEffect(() => {
+    localStorage.setItem('visibleColumns', JSON.stringify(visibleColumns));
+  }, [visibleColumns]);
 
   useEffect(() => {
     fetchClients();
@@ -109,7 +120,10 @@ const ClientListPage: React.FC = () => {
 
   const handleExport = async (format: 'excel' | 'csv' | 'pdf') => {
     try {
-      const blob = await importExportService.exportClients(format, filters);
+      const blob = await importExportService.exportClients(format, {
+        ...filters,
+        fields: visibleColumns.join(','), // Enviar columnas visibles
+      });
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
@@ -140,6 +154,10 @@ const ClientListPage: React.FC = () => {
           </div>
 
           <div className="toolbar-actions">
+            <ColumnSelector
+              visibleColumns={visibleColumns}
+              onColumnsChange={setVisibleColumns}
+            />
             <button className="btn-toolbar" onClick={() => setShowExportModal(true)}>
               <img src="/img/export-icon.png" alt="" className="btn-icon" />
               Exportar
@@ -170,10 +188,10 @@ const ClientListPage: React.FC = () => {
                       onChange={toggleSelectAll}
                     />
                   </th>
-                  <th className="th-sortable">PROVEEDOR</th>
-                  <th className="th-sortable">FECHA</th>
-                  <th className="th-sortable">PRECIO</th>
-                  <th className="th-sortable">ESTADO</th>
+                  {visibleColumns.includes('provider') && <th className="th-sortable">PROVEEDOR</th>}
+                  {visibleColumns.includes('date') && <th className="th-sortable">FECHA</th>}
+                  {visibleColumns.includes('price') && <th className="th-sortable">PRECIO</th>}
+                  {visibleColumns.includes('status') && <th className="th-sortable">ESTADO</th>}
                   <th>ACCIONES</th>
                 </tr>
               </thead>
@@ -187,19 +205,27 @@ const ClientListPage: React.FC = () => {
                       onChange={() => toggleClientSelection(client.id)}
                     />
                   </td>
-                  <td className="td-provider">
-                    <div className="provider-name">{client.name}</div>
-                    <div className="provider-email">{client.email}</div>
-                    <div className="provider-phone">{client.phone}</div>
-                  </td>
-                  <td>{new Date(client.createdAt).toLocaleDateString('es-ES')}</td>
-                  <td>{client.price.toLocaleString()} €</td>
-                  <td>
-                    <span className={`status-badge ${client.status.toLowerCase()}`}>
-                      <span className="status-dot"></span>
-                      {client.status.toLowerCase() === 'active' ? 'Activo' : 'Inactivo'}
-                    </span>
-                  </td>
+                  {visibleColumns.includes('provider') && (
+                    <td className="td-provider">
+                      <div className="provider-name">{client.name}</div>
+                      {visibleColumns.includes('email') && <div className="provider-email">{client.email}</div>}
+                      {visibleColumns.includes('phone') && <div className="provider-phone">{client.phone}</div>}
+                    </td>
+                  )}
+                  {visibleColumns.includes('date') && (
+                    <td>{new Date(client.createdAt).toLocaleDateString('es-ES')}</td>
+                  )}
+                  {visibleColumns.includes('price') && (
+                    <td>{client.price.toLocaleString()} €</td>
+                  )}
+                  {visibleColumns.includes('status') && (
+                    <td>
+                      <span className={`status-badge ${client.status.toLowerCase()}`}>
+                        <span className="status-dot"></span>
+                        {client.status.toLowerCase() === 'active' ? 'Activo' : 'Inactivo'}
+                      </span>
+                    </td>
+                  )}
                   <td className="td-actions">
                     <button 
                       className="btn-action" 
@@ -213,7 +239,7 @@ const ClientListPage: React.FC = () => {
                 ))}
                 {clients.length === 0 && (
                   <tr>
-                    <td colSpan={6} style={{ textAlign: 'center', padding: '40px' }}>
+                    <td colSpan={visibleColumns.length + 2} style={{ textAlign: 'center', padding: '40px' }}>
                       No se encontraron clientes
                     </td>
                   </tr>

@@ -52,6 +52,7 @@ export interface PaginationParams {
   maxPrice?: number;
   startDate?: string;
   endDate?: string;
+  fields?: string;
 }
 
 export interface PaginatedResponse<T> {
@@ -71,3 +72,19 @@ export interface ApiError {
   errors?: any[];
 }
 
+export type ClientField = 'email' | 'phone' | 'provider' | 'date' | 'price' | 'status';
+
+export interface FieldOption {
+  key: ClientField;
+  label: string;
+  defaultVisible: boolean;
+}
+
+export const AVAILABLE_FIELDS: FieldOption[] = [
+  { key: 'provider', label: 'Proveedor', defaultVisible: true },
+  { key: 'email', label: 'Email', defaultVisible: true },
+  { key: 'phone', label: 'Teléfono', defaultVisible: true },
+  { key: 'date', label: 'Fecha', defaultVisible: true },
+  { key: 'price', label: 'Precio', defaultVisible: true },
+  { key: 'status', label: 'Estado', defaultVisible: true },
+];
