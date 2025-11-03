@@ -10,9 +10,9 @@ export const providerService = {
     return response.data;
   },
 
-  getProviderById: async (id: number): Promise<Provider> => {
+  getProviderById: async (id: string): Promise<Provider> => {
     const response = await axiosInstance.get<Provider>(
-      API_CONFIG.ENDPOINTS.PROVIDERS.DETAIL(id)
+      `${API_CONFIG.ENDPOINTS.PROVIDERS.LIST}/${id}`
     );
     return response.data;
   },
@@ -25,16 +25,16 @@ export const providerService = {
     return response.data;
   },
 
-  updateProvider: async (id: number, data: { name: string }): Promise<Provider> => {
+  updateProvider: async (id: string, data: { name: string }): Promise<Provider> => {
     const response = await axiosInstance.put<Provider>(
-      API_CONFIG.ENDPOINTS.PROVIDERS.UPDATE(id),
+      `${API_CONFIG.ENDPOINTS.PROVIDERS.LIST}/${id}`,
       data
     );
     return response.data;
   },
 
-  deleteProvider: async (id: number): Promise<void> => {
-    await axiosInstance.delete(API_CONFIG.ENDPOINTS.PROVIDERS.DELETE(id));
+  deleteProvider: async (id: string): Promise<void> => {
+    await axiosInstance.delete(`${API_CONFIG.ENDPOINTS.PROVIDERS.LIST}/${id}`);
   },
 };
 

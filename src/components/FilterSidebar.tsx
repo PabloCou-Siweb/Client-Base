@@ -9,8 +9,8 @@ interface FilterSidebarProps {
 }
 
 const FilterSidebar: React.FC<FilterSidebarProps> = ({ isOpen, onClose, onApplyFilters }) => {
-  const [selectedProviders, setSelectedProviders] = useState<string[]>(['Tech Solutions', 'CloudWave']);
-  const [selectedDate, setSelectedDate] = useState('15/03/2024');
+  const [selectedProviders, setSelectedProviders] = useState<string[]>([]);
+  const [selectedDate, setSelectedDate] = useState('');
   const [dateFilter, setDateFilter] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('Todos');
   const [minPrice, setMinPrice] = useState(0);
@@ -23,6 +23,13 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ isOpen, onClose, onApplyF
     
     if (filter === 'hoy') {
       setSelectedDate(today.toLocaleDateString('es-ES'));
+    } else if (filter === 'esta-semana') {
+      const weekStart = new Date(today);
+      weekStart.setDate(today.getDate() - today.getDay());
+      setSelectedDate(weekStart.toLocaleDateString('es-ES'));
+    } else if (filter === 'este-mes') {
+      const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+      setSelectedDate(monthStart.toLocaleDateString('es-ES'));
     }
   };
 
@@ -168,7 +175,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ isOpen, onClose, onApplyF
 
           <div className="filter-section">
             <div className="filter-section-header">
-              <label className="filter-label">Proveedor</label>
+              <label className="filter-label">Precio</label>
               <span className="filter-range-value">{minPrice * 2}k - {maxPrice * 2}k</span>
             </div>
             <div className="dual-range-container">

@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ProviderListModal.css';
+import { providerService } from '../services/provider.service';
+import { Provider } from '../types';
 
 interface ProviderListModalProps {
   isOpen: boolean;
@@ -16,16 +18,56 @@ const ProviderListModal: React.FC<ProviderListModalProps> = ({
 }) => {
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<string[]>(selectedProviders);
+  const [providers, setProviders] = useState<Provider[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const allProviders = [
-    { letter: 'A', items: ['AgileSoft Solutions', 'Active S.L'] },
-    { letter: 'B', items: ['Bing Soft', 'Balance S.L'] },
-    { letter: 'C', items: ['CloudWave'] },
-    { letter: 'D', items: ['Digital Solutions'] },
-    { letter: 'E', items: ['EcoTech Innovations'] },
-    { letter: 'N', items: ['NextGen Systems'] },
-    { letter: 'T', items: ['TechCorp Solutions'] },
-  ];
+  useEffect(() => {
+    if (isOpen) {
+      loadProviders();
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    setSelected(selectedProviders);
+  }, [selectedProviders]);
+
+  const loadProviders = async () => {
+    try {
+      setIsLoading(true);
+      const data = await providerService.getProviders();
+      setProviders(data);
+    } catch (error) {
+      console.error('Error cargando proveedores:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const groupProvidersByLetter = () => {
+    const filtered = providers.filter(p => 
+      search === '' || 
+      p.name.toLowerCase().includes(search.toLowerCase())
+    );
+
+    const grouped: { [key: string]: string[] } = {};
+    
+    filtered.forEach(provider => {
+      const firstLetter = provider.name[0].toUpperCase();
+      if (!grouped[firstLetter]) {
+        grouped[firstLetter] = [];
+      }
+      grouped[firstLetter].push(provider.name);
+    });
+
+    return Object.keys(grouped)
+      .sort()
+      .map(letter => ({
+        letter,
+        items: grouped[letter].sort()
+      }));
+  };
+
+  const allProviders = groupProvidersByLetter();
 
   const toggleProvider = (provider: string) => {
     setSelected(prev =>
@@ -71,24 +113,34 @@ const ProviderListModal: React.FC<ProviderListModalProps> = ({
         </div>
 
         <div className="provider-list">
-          {allProviders.map(group => (
-            <div key={group.letter} className="provider-group">
-              <div className="provider-group-letter">{group.letter}</div>
-              {group.items.map(provider => (
-                <div key={provider} className="provider-item">
-                  <span className="provider-name">{provider}</span>
-                  <label className="provider-checkbox">
-                    <input
-                      type="checkbox"
-                      checked={selected.includes(provider)}
-                      onChange={() => toggleProvider(provider)}
-                    />
-                    <span className="checkbox-custom"></span>
-                  </label>
-                </div>
-              ))}
+          {isLoading ? (
+            <div style={{ padding: '20px', textAlign: 'center', color: '#666' }}>
+              Cargando proveedores...
             </div>
-          ))}
+          ) : allProviders.length === 0 ? (
+            <div style={{ padding: '20px', textAlign: 'center', color: '#666' }}>
+              {search ? 'No se encontraron proveedores' : 'No hay proveedores disponibles'}
+            </div>
+          ) : (
+            allProviders.map(group => (
+              <div key={group.letter} className="provider-group">
+                <div className="provider-group-letter">{group.letter}</div>
+                {group.items.map(provider => (
+                  <div key={provider} className="provider-item">
+                    <span className="provider-name">{provider}</span>
+                    <label className="provider-checkbox">
+                      <input
+                        type="checkbox"
+                        checked={selected.includes(provider)}
+                        onChange={() => toggleProvider(provider)}
+                      />
+                      <span className="checkbox-custom"></span>
+                    </label>
+                  </div>
+                ))}
+              </div>
+            ))
+          )}
         </div>
 
         <div className="provider-modal-footer">

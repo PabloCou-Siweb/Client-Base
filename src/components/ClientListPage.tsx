@@ -270,6 +270,37 @@ const ClientListPage: React.FC = () => {
                 transformedFilters.maxPrice = appliedFilters.maxPrice * 2000;
               }
 
+              // Filtro de proveedores
+              if (appliedFilters.providers && appliedFilters.providers.length > 0) {
+                transformedFilters.providers = appliedFilters.providers.join(',');
+              }
+
+              // Filtro de fecha
+              if (appliedFilters.date) {
+                // Convertir fecha de formato 'dd/mm/yyyy' a formato ISO 'yyyy-mm-dd'
+                const dateParts = appliedFilters.date.split('/');
+                if (dateParts.length === 3) {
+                  const isoDate = `${dateParts[2]}-${dateParts[1].padStart(2, '0')}-${dateParts[0].padStart(2, '0')}`;
+                  
+                  if (appliedFilters.dateFilter === 'hoy') {
+                    transformedFilters.startDate = isoDate;
+                    transformedFilters.endDate = isoDate;
+                  } else if (appliedFilters.dateFilter === 'esta-semana') {
+                    transformedFilters.startDate = isoDate;
+                    const weekEnd = new Date(dateParts[2], parseInt(dateParts[1]) - 1, parseInt(dateParts[0]));
+                    weekEnd.setDate(weekEnd.getDate() + 6);
+                    transformedFilters.endDate = weekEnd.toISOString().split('T')[0];
+                  } else if (appliedFilters.dateFilter === 'este-mes') {
+                    transformedFilters.startDate = isoDate;
+                    const monthEnd = new Date(parseInt(dateParts[2]), parseInt(dateParts[1]), 0);
+                    transformedFilters.endDate = monthEnd.toISOString().split('T')[0];
+                  } else {
+                    // Si no hay filtro de periodo, usar la fecha seleccionada
+                    transformedFilters.startDate = isoDate;
+                  }
+                }
+              }
+
               setFilters(transformedFilters);
               setCurrentPage(1);
               setShowFilters(false);

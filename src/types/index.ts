@@ -25,24 +25,28 @@ export interface Client {
   phone: string;
   status: 'active' | 'inactive';
   price: number;
-  providerId: number;
+  providerId: string;
   provider?: Provider;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface Provider {
-  id: number;
+  id: string;
   name: string;
   createdAt: string;
   updatedAt: string;
+  _count?: {
+    clients: number;
+  };
 }
 
 export interface PaginationParams {
   page?: number;
   limit?: number;
   search?: string;
-  providerId?: number;
+  providerId?: string;
+  providers?: string;
   status?: 'active' | 'inactive';
   minPrice?: number;
   maxPrice?: number;
